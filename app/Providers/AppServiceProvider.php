@@ -3,6 +3,7 @@
 namespace Inmanturbo\ModuleCompiler\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Inmanturbo\ModuleCompiler\Console\Commands\BuildCommand;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                BuildCommand::class,
+            ]);
+        }
     }
 }
