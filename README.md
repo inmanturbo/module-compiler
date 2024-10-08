@@ -1,4 +1,7 @@
-## Usage
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/inmanturbo/module-compiler.svg?style=flat-square)](https://packagist.org/packages/inmanturbo/module-compiler)
+[![Total Downloads](https://img.shields.io/packagist/dt/inmanturbo/module-compiler.svg?style=flat-square)](https://packagist.org/packages/inmanturbo/module-compiler)
+
+# Usage
 
 example module: create at path modules/test-one-two.php
 
