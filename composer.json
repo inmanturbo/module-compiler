@@ -23,8 +23,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Inmanturbo\\ModuleCompiler\\Database\\Factories\\": "database/factories/",
-            "Inmanturbo\\ModuleCompiler\\Database\\Seeders\\": "database/seeders/",
             "Inmanturbo\\ModuleCompiler\\": "app/"
         }
     },
