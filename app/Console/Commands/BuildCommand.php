@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
 
+use function Illuminate\Filesystem\join_paths;
+
 class BuildCommand extends Command
 {
     /**
@@ -13,7 +15,7 @@ class BuildCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:build';
+    protected $signature = 'app:build {--module=*} {--module-path=} {--build-path=} {--realpath}';
 
     /**
      * The console command description.
@@ -27,8 +29,14 @@ class BuildCommand extends Command
      */
     public function handle()
     {
+        $modulePath = $this->option('realpath') ? realpath($this->option('module-path')) : base_path($this->option('module-path'));
+
+        $fromBase = $this->option('build-path') ? join_paths(base_path(), $this->option('build-path')) : base_path();
+        
+        $buildPath = $this->option('realpath') ? realpath($this->option('build-path') ?: '.') : $fromBase;
+
         $finder = new Finder();
-        $finder->files()->in(base_path('modules'));
+        $finder->files()->in($modulePath);
 
         if (!$finder->hasResults()) {
             $this->warn('No module files found in the modules directory.');
@@ -53,7 +61,7 @@ class BuildCommand extends Command
 
                 $fileContent = "<?php\n\n" . $fileContent;
 
-                $fullPath = base_path($relativePath);
+                $fullPath = join_paths($buildPath, $relativePath);
 
                 $directory = dirname($fullPath);
                 if (!File::exists($directory)) {
