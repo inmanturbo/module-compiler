@@ -1,5 +1,5 @@
 <?php
 
 return [
-    App\Providers\AppServiceProvider::class,
+    Inmanturbo\ModuleCompiler\Providers\AppServiceProvider::class,
 ];
