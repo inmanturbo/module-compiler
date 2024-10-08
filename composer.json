@@ -1,7 +1,7 @@
 {
     "name": "inmanturbo/module-compiler",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Compile single file namespace to Psr4",
     "keywords": [
         "laravel",
         "framework"
