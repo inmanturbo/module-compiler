@@ -15,7 +15,7 @@ class BuildCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:build {--module=*} {--module-path=} {--build-path=} {--realpath}';
+    protected $signature = 'app:build {--module=*} {--module-path=modules} {--build-path=} {--realpath}';
 
     /**
      * The console command description.
