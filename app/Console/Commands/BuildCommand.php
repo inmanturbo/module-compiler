@@ -32,18 +32,19 @@ class BuildCommand extends Command
         $modulePath = $this->option('realpath') ? realpath($this->option('module-path')) : base_path($this->option('module-path'));
 
         $fromBase = $this->option('build-path') ? join_paths(base_path(), $this->option('build-path')) : base_path();
-        
+
         $buildPath = $this->option('realpath') ? realpath($this->option('build-path') ?: '.') : $fromBase;
 
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($modulePath);
 
         foreach ($this->option('module') as $module) {
             $finder->name($module);
         }
 
-        if (!$finder->hasResults()) {
+        if (! $finder->hasResults()) {
             $this->warn('No matching build modules found in module-path.');
+
             return;
         }
 
@@ -56,6 +57,7 @@ class BuildCommand extends Command
 
             if (empty($matches)) {
                 $this->warn("No file blocks found in module: {$file->getRelativePathname()}");
+
                 continue;
             }
 
@@ -73,11 +75,10 @@ class BuildCommand extends Command
                     continue;
                 }
 
-                $fileContent = "<?php\n\n" . $fileContent . "\n";
-
+                $fileContent = "<?php\n\n".$fileContent."\n";
 
                 $directory = dirname($fullPath);
-                if (!File::exists($directory)) {
+                if (! File::exists($directory)) {
                     File::makeDirectory($directory, 0755, true);
                     $this->info("Created directory: {$directory}");
                 }
@@ -91,6 +92,6 @@ class BuildCommand extends Command
             }
         }
 
-        $this->info("All modules have been built successfully.");
+        $this->info('All modules have been built successfully.');
     }
 }

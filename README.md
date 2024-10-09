@@ -3,6 +3,12 @@
 
 # Usage
 
+## Installation
+
+```bash
+composer require --dev inmanturbo/module-compiler
+```
+
 example module: create at path modules/test-one-two.php
 
 ```php

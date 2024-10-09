@@ -40,14 +40,14 @@ class CombineCommand extends Command
         $modulePath = $this->option('realpath') ? realpath($this->option('module-path')) : base_path($this->option('module-path'));
         $buildPath = $this->option('build-path') ? $this->option('build-path') : base_path();
 
-        if (!File::exists($modulePath)) {
+        if (! File::exists($modulePath)) {
             File::makeDirectory($modulePath, 0755, true);
             $this->info("Created modules directory at: {$modulePath}");
         }
 
         $buildModule = join_paths($modulePath, $moduleName);
 
-        if (!File::exists($buildModule)) {
+        if (! File::exists($buildModule)) {
             File::put($buildModule, "<?php\n");
             $this->info("Created build module: {$moduleName}");
         } else {
@@ -57,8 +57,9 @@ class CombineCommand extends Command
         foreach ($this->argument('files') as $filePath) {
             $fullPath = join_paths($buildPath, $filePath);
 
-            if (!File::isDirectory($fullPath)) {
+            if (! File::isDirectory($fullPath)) {
                 $this->extractFile($buildPath, $filePath, $buildModule);
+
                 continue;
             }
 
@@ -82,13 +83,15 @@ class CombineCommand extends Command
     {
         $fullPath = join_paths($buildPath, $filePath);
 
-        if (!File::exists($fullPath)) {
+        if (! File::exists($fullPath)) {
             $this->error("File does not exist: {$filePath}");
+
             return;
         }
 
-        if (!File::isReadable($fullPath)) {
+        if (! File::isReadable($fullPath)) {
             $this->error("File is not readable: {$filePath}");
+
             return;
         }
 
