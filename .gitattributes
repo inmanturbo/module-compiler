@@ -13,6 +13,7 @@ CHANGELOG.md export-ignore
 # Ignore all test and documentation with "export-ignore".
 /.github            export-ignore
 /bootstrap          export-ignore
+/modules            export-ignore
 /app/Models         export-ignore
 /app/Http           export-ignore
 /database           export-ignore
