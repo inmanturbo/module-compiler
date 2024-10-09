@@ -63,7 +63,7 @@ class BuildCommand extends Command
                 $relativePath = trim($match[1]);
                 $fileContent = trim($match[2]);
 
-                $fileContent = "<?php\n\n" . $fileContent;
+                $fileContent = "<?php\n\n" . $fileContent . "\n";
 
                 $fullPath = join_paths($buildPath, $relativePath);
 
