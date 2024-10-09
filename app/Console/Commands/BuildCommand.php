@@ -27,7 +27,7 @@ class BuildCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $modulePath = $this->option('realpath') ? realpath($this->option('module-path')) : base_path($this->option('module-path'));
 
@@ -55,7 +55,7 @@ class BuildCommand extends Command
             // Captures the file path and the content within the block
             preg_match_all('/\/\/\s*BEGIN_FILE:\s*\((.*?)\)\s*(.*?)\/\/\s*END_FILE/s', $content, $matches, PREG_SET_ORDER);
 
-            if (empty($matches)) {
+            if ($matches === []) {
                 $this->warn("No file blocks found in module: {$file->getRelativePathname()}");
 
                 continue;

@@ -34,11 +34,11 @@ class CombineCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $moduleName = $this->option('module');
         $modulePath = $this->option('realpath') ? realpath($this->option('module-path')) : base_path($this->option('module-path'));
-        $buildPath = $this->option('build-path') ? $this->option('build-path') : base_path();
+        $buildPath = $this->option('build-path') ?: base_path();
 
         if (! File::exists($modulePath)) {
             File::makeDirectory($modulePath, 0755, true);
@@ -98,7 +98,7 @@ class CombineCommand extends Command
         $content = File::get($fullPath);
 
         $content = preg_replace('/<\?php\s*/', '', $content);
-        $content = trim($content);
+        $content = trim((string) $content);
 
         $__php_eol = PHP_EOL;
 
