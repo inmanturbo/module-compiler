@@ -4,6 +4,7 @@ namespace Inmanturbo\ModuleCompiler\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Finder\Finder;
 
 use function Illuminate\Filesystem\join_paths;
 
@@ -44,10 +45,10 @@ class CombineCommand extends Command
             $this->info("Created modules directory at: {$modulePath}");
         }
 
-        $modulePath = join_paths($modulePath, $moduleName);
+        $buildModule = join_paths($modulePath, $moduleName);
 
-        if (!File::exists($modulePath)) {
-            File::put($modulePath, "<?php\n");
+        if (!File::exists($buildModule)) {
+            File::put($buildModule, "<?php\n");
             $this->info("Created build module: {$moduleName}");
         } else {
             $this->info("Appending to existing build module: {$moduleName}");
@@ -56,30 +57,52 @@ class CombineCommand extends Command
         foreach ($this->argument('files') as $filePath) {
             $fullPath = join_paths($buildPath, $filePath);
 
-            if (!File::exists($fullPath)) {
-                $this->error("File does not exist: {$filePath}");
+            if (!File::isDirectory($fullPath)) {
+                $this->extractFile($buildPath, $filePath, $buildModule);
                 continue;
             }
 
-            if (!File::isReadable($fullPath)) {
-                $this->error("File is not readable: {$filePath}");
-                continue;
+            $files = (new Finder)->in($fullPath)->name('*.php')->files();
+
+            foreach ($files as $file) {
+                $filePath = str_replace($buildPath, '', $file->getPathname());
+
+                $filePath = ltrim($filePath, DIRECTORY_SEPARATOR);
+
+                $this->extractFile($buildPath, $filePath, $buildModule);
             }
-
-            $content = File::get($fullPath);
-
-            $content = preg_replace('/<\?php\s*/', '', $content);
-            $content = trim($content);
-
-            $block = "\n// BEGIN_FILE: ({$filePath})\n\n{$content}\n// END_FILE\n";
-
-            File::append($modulePath, $block);
-
-            $this->info("Appended file: {$filePath} to module: {$moduleName}");
         }
 
-        $this->info("All specified files have been combined into {$moduleName}.");
+        $this->info("All specified files have been combined into {$buildModule}.");
 
-        return 0; // Exit with success code
+        return 0;
+    }
+
+    protected function extractFile(string $buildPath, string $filePath, string $buildModule)
+    {
+        $fullPath = join_paths($buildPath, $filePath);
+
+        if (!File::exists($fullPath)) {
+            $this->error("File does not exist: {$filePath}");
+            return;
+        }
+
+        if (!File::isReadable($fullPath)) {
+            $this->error("File is not readable: {$filePath}");
+            return;
+        }
+
+        $content = File::get($fullPath);
+
+        $content = preg_replace('/<\?php\s*/', '', $content);
+        $content = trim($content);
+
+        $__php_eol = PHP_EOL;
+
+        $block = "{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
+
+        File::append($buildModule, $block);
+
+        $this->info("Appended file: {$filePath} to module: {$buildModule}");
     }
 }

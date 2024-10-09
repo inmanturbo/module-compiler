@@ -63,9 +63,18 @@ class BuildCommand extends Command
                 $relativePath = trim($match[1]);
                 $fileContent = trim($match[2]);
 
+                $fullPath = join_paths($buildPath, $relativePath);
+
+                if ($fileContent === '// DELETE_FILE') {
+                    if (File::exists($fullPath)) {
+                        File::delete($fullPath);
+                    }
+
+                    continue;
+                }
+
                 $fileContent = "<?php\n\n" . $fileContent . "\n";
 
-                $fullPath = join_paths($buildPath, $relativePath);
 
                 $directory = dirname($fullPath);
                 if (!File::exists($directory)) {
