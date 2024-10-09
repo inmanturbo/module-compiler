@@ -1,7 +1,7 @@
 {
     "name": "inmanturbo/module-compiler",
-    "type": "project",
-    "description": "Compile single file namespace to Psr4",
+    "type": "library",
+    "description": "Build single file patche stubs for laravel projects",
     "keywords": [
         "laravel",
         "framework"
