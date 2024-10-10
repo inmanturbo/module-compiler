@@ -75,7 +75,9 @@ class BuildCommand extends Command
                     continue;
                 }
 
-                $shebang = match (pathinfo($fullPath, PATHINFO_EXTENSION)) {
+                $fullExtension = implode('.', array_slice(explode('.', basename($fullPath)), 1));
+
+                $shebang = match ($fullExtension) {
                     'php' => '<?php'.PHP_EOL.PHP_EOL,
                     'sh' => '#!/bin/bash'.PHP_EOL.PHP_EOL,
                     default => '',
