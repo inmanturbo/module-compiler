@@ -18,10 +18,10 @@ class CombineCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'combine {files* : Path to or more PHP files to combine, relative to build-path}
+    protected $signature = 'combine {files* : Path to one or more PHP files to combine, relative to build-path}
                                         {--module-path=modules : The name of the build modules directory}
                                         {--build-path= : The base path to find the files under (leave empty for `base_path()`}
-                                        {--realpath : indicates the given module directory is absolute}
+                                        {--realpath : Indicates indicates provided paths will be absolute}
                                         {--module=app.php : The name of the build module file}';
 
     /**

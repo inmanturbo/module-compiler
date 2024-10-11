@@ -15,7 +15,10 @@ class BuildCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'build {module?*} {--module-path=modules} {--build-path= : leave empty for `base_path()`} {--realpath}';
+    protected $signature = 'build {module?* : File containing code that should be split out into one or more files} 
+                                    {--module-path=modules : Directory under which modules will be found} 
+                                    {--build-path= : Leave empty for `base_path()`} 
+                                    {--realpath : Use realpath for module and build path(s)}';
 
     /**
      * The console command description.
