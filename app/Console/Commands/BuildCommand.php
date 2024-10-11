@@ -33,7 +33,7 @@ class BuildCommand extends Command
 
         $buildPath = $this->option('build-path') ?: base_path();
 
-        if ($this->option('real-path')) {
+        if ($this->option('realpath')) {
             $modulePath = realpath($modulePath);
             $buildPath = realpath($buildPath);
         }
