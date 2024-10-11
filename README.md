@@ -1,15 +1,17 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/inmanturbo/module-compiler.svg?style=flat-square)](https://packagist.org/packages/inmanturbo/module-compiler)
 [![Total Downloads](https://img.shields.io/packagist/dt/inmanturbo/module-compiler.svg?style=flat-square)](https://packagist.org/packages/inmanturbo/module-compiler)
 
-# Usage
-
 ## Installation
 
 ```bash
 composer require --dev inmanturbo/module-compiler
 ```
 
-example build module: create at path modules/test-one-two.php
+## Usage
+
+First create a build module:
+
+Example build module: (Create at path modules/test-one-two.php)
 
 ```php
 <?php
@@ -42,6 +44,8 @@ class TestTwo extends Model
 
 // END_FILE
 ```
+
+Next run the build command:
 
 ```bash
 php artisan build test-one-two.php
@@ -78,7 +82,7 @@ Options:
   -n, --no-interaction             Do not ask any interactive question
       --env[=ENV]                  The environment the command should run under
   -v|vv|vvv, --verbose             Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  ```
+```
 
 ```bash
 php artisan combine --help
