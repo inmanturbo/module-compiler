@@ -29,11 +29,14 @@ class BuildCommand extends Command
      */
     public function handle(): void
     {
-        $modulePath = $this->option('realpath') ? realpath($this->option('module-path')) : base_path($this->option('module-path'));
+        $modulePath = $this->option('module-path');
 
-        $fromBase = $this->option('build-path') ? join_paths(base_path(), $this->option('build-path')) : base_path();
+        $buildPath = $this->option('build-path') ?: base_path();
 
-        $buildPath = $this->option('realpath') ? realpath($this->option('build-path') ?: '.') : $fromBase;
+        if ($this->option('real-path')) {
+            $modulePath = realpath($modulePath);
+            $buildPath = realpath($buildPath);
+        }
 
         $finder = new Finder;
         $finder->files()->in($modulePath);
