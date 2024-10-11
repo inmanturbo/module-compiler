@@ -78,7 +78,15 @@ class BuildCommand extends Command
                     continue;
                 }
 
-                $fileContent = "<?php\n\n".$fileContent."\n";
+                $fullExtension = implode('.', array_slice(explode('.', basename($fullPath)), 1));
+
+                $shebang = match ($fullExtension) {
+                    'php' => '<?php'.PHP_EOL.PHP_EOL,
+                    'sh' => '#!/bin/bash'.PHP_EOL.PHP_EOL,
+                    default => '',
+                };
+
+                $fileContent = $shebang.$fileContent.PHP_EOL;
 
                 $directory = dirname($fullPath);
                 if (! File::exists($directory)) {
