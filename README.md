@@ -9,7 +9,7 @@ composer require --dev inmanturbo/module-compiler
 
 ## Usage
 
-First create a build module:
+First create a build module
 
 Example build module: (Create at path modules/test-one-two.php)
 
@@ -45,7 +45,7 @@ class TestTwo extends Model
 // END_FILE
 ```
 
-Next run the build command:
+Next run the build command
 
 ```bash
 php artisan build test-one-two.php
