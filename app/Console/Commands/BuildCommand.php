@@ -15,7 +15,7 @@ class BuildCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:build {--module=*} {--module-path=modules} {--build-path= : leave empty for `base_path()`} {--realpath}';
+    protected $signature = 'build {module?*} {--module-path=modules} {--build-path= : leave empty for `base_path()`} {--realpath}';
 
     /**
      * The console command description.
@@ -41,7 +41,7 @@ class BuildCommand extends Command
         $finder = new Finder;
         $finder->files()->in($modulePath);
 
-        foreach ($this->option('module') as $module) {
+        foreach ($this->argument('module') as $module) {
             $finder->name($module);
         }
 
