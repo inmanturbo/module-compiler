@@ -102,7 +102,7 @@ class CombineCommand extends Command
 
         $content = File::get($fullPath);
 
-        $content = preg_replace('/<\?php\s*/', '', $content);
+        $content = preg_replace('/<\?php\s*/', '', $content, 1);
         $content = trim((string) $content);
 
         $__php_eol = PHP_EOL;
