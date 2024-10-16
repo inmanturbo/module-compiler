@@ -3,6 +3,7 @@
 namespace Inmanturbo\ModuleCompiler\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Inmanturbo\ModuleCompiler\Console\Commands\AppendCommand;
 use Inmanturbo\ModuleCompiler\Console\Commands\BuildCommand;
 use Inmanturbo\ModuleCompiler\Console\Commands\CombineCommand;
 
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
             $this->commands([
                 BuildCommand::class,
                 CombineCommand::class,
+                AppendCommand::class,
             ]);
         }
     }
