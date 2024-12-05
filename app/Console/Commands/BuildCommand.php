@@ -67,6 +67,8 @@ class BuildCommand extends Command
                 continue;
             }
 
+            $this->info("Building module: {$file->getRelativePathname()}");
+
             foreach ($matches as $match) {
                 $relativePath = trim($match[1]);
                 $fileContent = trim($match[2]);
