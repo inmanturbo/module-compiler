@@ -19,7 +19,7 @@ class CombineCommand extends Command
      * @var string
      */
     protected $signature = 'combine {files* : Path to one or more files to combine, relative to build-path}
-                                        {--name=*.php : Match file names with the given pattern}
+                                        {--name= : Match file names with the given pattern}
                                         {--module-path=modules : The name of the build modules directory}
                                         {--build-path= : The base path to find the files under (leave empty for `base_path()`}
                                         {--realpath : Indicates indicates provided paths will be absolute}
@@ -69,7 +69,7 @@ class CombineCommand extends Command
                 continue;
             }
 
-            $files = (new Finder)->in($fullPath)->name($this->argument('name'))->files();
+            $files = (new Finder)->in($fullPath)->name($this->option('name') ? $this->option('name'): '*.php')->files();
 
             foreach ($files as $file) {
                 $filePath = str_replace($buildPath, '', $file->getPathname());
