@@ -23,7 +23,9 @@ class CombineCommand extends Command
                                         {--module-path=modules : The name of the build modules directory}
                                         {--build-path= : The base path to find the files under (leave empty for `base_path()`}
                                         {--realpath : Indicates indicates provided paths will be absolute}
-                                        {--module=app.php : The name of the build module file}';
+                                        {--module=app.php : The name of the build module file}
+                                        {--preserve-path : Use the file path as the build module}
+                                        {--namespace : insert namespaces between fileblocks}';
 
     /**
      * The console command description.
@@ -53,17 +55,47 @@ class CombineCommand extends Command
 
         $buildModule = join_paths($modulePath, $moduleName);
 
-        if (! File::exists($buildModule)) {
-            File::put($buildModule, '<?php'.PHP_EOL);
-            $this->info("Created build module: {$moduleName}");
-        } else {
-            $this->info("Appending to existing build module: {$moduleName}");
+        if (! $this->option('preserve-path')) {
+            if (! File::exists($buildModule)) {
+                File::put($buildModule, '<?php'.PHP_EOL);
+                $this->info("Created build module: {$moduleName}");
+            } else {
+                $this->info("Appending to existing build module: {$moduleName}");
+            }
         }
 
         foreach ($this->argument('files') as $filePath) {
             $fullPath = join_paths($buildPath, $filePath);
 
             if (! File::isDirectory($fullPath)) {
+
+                if ($this->option('preserve-path')) {
+                    $buildModule = join_paths($this->option('module-path'), $filePath);
+                }
+
+                if (! File::exists($directory = dirname($buildModule))) {
+                    File::makeDirectory($directory, 0755, true);
+                    $this->info("Created directory: {$directory}");
+                }
+
+                if ($this->option('preserve-path')) {
+
+                    if (! File::exists($buildModule)) {
+                        $fullExtension = implode('.', array_slice(explode('.', basename($buildModule)), 1));
+
+                        $shebang = match ($fullExtension) {
+                            'php' => '<?php'.PHP_EOL.PHP_EOL,
+                            'sh' => '#!/bin/bash'.PHP_EOL.PHP_EOL,
+                            default => '',
+                        };
+
+                        File::put($buildModule, $shebang);
+                        $this->info("Created build module: {$buildModule}");
+                    } else {
+                        $this->info("Appending to existing build module: {$buildModule}");
+                    }
+                }
+
                 $this->extractFile($buildPath, $filePath, $buildModule);
 
                 continue;
@@ -75,6 +107,33 @@ class CombineCommand extends Command
                 $filePath = str_replace($buildPath, '', $file->getPathname());
 
                 $filePath = ltrim($filePath, DIRECTORY_SEPARATOR);
+
+                if ($this->option('preserve-path')) {
+                    $buildModule = join_paths($this->option('module-path'), $filePath);
+                }
+
+                if (! File::exists($directory = dirname($buildModule))) {
+                    File::makeDirectory($directory, 0755, true);
+                    $this->info("Created directory: {$directory}");
+                }
+
+                if ($this->option('preserve-path')) {
+
+                    if (! File::exists($buildModule)) {
+                        $fullExtension = implode('.', array_slice(explode('.', basename($buildModule)), 1));
+
+                        $shebang = match ($fullExtension) {
+                            'php' => '<?php'.PHP_EOL.PHP_EOL,
+                            'sh' => '#!/bin/bash'.PHP_EOL.PHP_EOL,
+                            default => '',
+                        };
+
+                        File::put($buildModule, $shebang);
+                        $this->info("Created build module: {$buildModule}");
+                    } else {
+                        $this->info("Appending to existing build module: {$buildModule}");
+                    }
+                }
 
                 $this->extractFile($buildPath, $filePath, $buildModule);
             }
@@ -108,7 +167,18 @@ class CombineCommand extends Command
 
         $__php_eol = PHP_EOL;
 
-        $block = "{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
+        $fullExtension = implode('.', array_slice(explode('.', basename($buildModule)), 1));
+
+        $namespace = match ($fullExtension) {
+            'php' => 'namespace i'. str()->of(str()->ulid())->lower()->__toString().';',
+            default => '',
+        };
+
+        if ($this->option('namespace')) {
+            $block = "{$__php_eol}{$namespace}{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
+        } else {
+            $block = "{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
+        }
 
         File::append($buildModule, $block);
 
