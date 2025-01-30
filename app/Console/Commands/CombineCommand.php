@@ -175,7 +175,7 @@ class CombineCommand extends Command
         };
 
         if ($this->option('namespace')) {
-            $block = "{$__php_eol}{$namespace}{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
+            $block = "{$__php_eol}{$namespace}{$__php_eol}{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
         } else {
             $block = "{$__php_eol}// BEGIN_FILE: ({$filePath}){$__php_eol}{$content}{$__php_eol}// END_FILE{$__php_eol}";
         }
