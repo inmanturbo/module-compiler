@@ -69,6 +69,7 @@ class WatchCommand extends Command
                     'cache',
                     'modules',
                     '.git'.DIRECTORY_SEPARATOR,
+                    join_paths('public', 'build'),
                 ])) {
                     return;
                 }
