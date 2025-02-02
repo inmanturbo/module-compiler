@@ -24,7 +24,7 @@ class AddProvidersCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $providersPath = app_path('Providers');
         $bootstrapProvidersFile = base_path('bootstrap/providers.php');
@@ -42,8 +42,8 @@ class AddProvidersCommand extends Command
         }
 
         $providers = collect(File::files($providersPath))
-            ->filter(fn ($file) => $file->getExtension() === 'php')
-            ->map(fn ($file) => 'App\\Providers\\'.$file->getFilenameWithoutExtension())
+            ->filter(fn ($file): bool => $file->getExtension() === 'php')
+            ->map(fn ($file): string => 'App\\Providers\\'.$file->getFilenameWithoutExtension())
             ->values()
             ->toArray();
 

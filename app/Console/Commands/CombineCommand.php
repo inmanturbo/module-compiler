@@ -101,7 +101,7 @@ class CombineCommand extends Command
                 continue;
             }
 
-            $files = (new Finder)->in($fullPath)->name($this->option('name') ? $this->option('name') : '*.php')->files();
+            $files = (new Finder)->in($fullPath)->name($this->option('name') ?: '*.php')->files();
 
             foreach ($files as $file) {
                 $filePath = str_replace($buildPath, '', $file->getPathname());

@@ -8,13 +8,11 @@ use Illuminate\Support\Str;
 use Spatie\Watcher\Watch;
 
 use function Illuminate\Filesystem\join_paths;
-use function Laravel\Prompts\info;
+use function Laravel\Prompts\note;
 
 class WatchCommand extends Command
 {
-
-    public $builtFiles = [];
-    public $combinedFiles = [];
+    public $processedFiles = [];
 
     /**
      * The name and signature of the console command.
@@ -33,33 +31,33 @@ class WatchCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-        Event::listen('built.file', function ($relativePath) {
-            $this->builtFiles[$relativePath] = $relativePath;
+        Event::listen('built.file', function ($relativePath): void {
+            $this->processedFiles[$relativePath] = $relativePath;
         });
-        Event::listen('combined.file', function ($modulePath) {
-            dump($modulePath);
-            $this->combinedFiles[$modulePath] = $modulePath;
+        Event::listen('combined.file', function ($modulePath): void {
+            $this->processedFiles[$modulePath] = $modulePath;
         });
 
         Watch::path(join_paths(base_path()))
-            ->onAnyChange(function (string $type, string $path) {
+            ->onAnyChange(function (string $type, string $path): void {
+
+                if ($type !== Watch::EVENT_TYPE_FILE_CREATED && $type !== Watch::EVENT_TYPE_FILE_UPDATED) {
+                    return;
+                }
 
                 $path = str_replace(base_path().DIRECTORY_SEPARATOR, '', $path);
 
+                if (in_array($path, $this->processedFiles)) {
+                    note('Skipping '.$path.' to avoid infinite loop!');
+                    unset($this->processedFiles[$path]);
+
+                    return;
+                }
 
                 if (str_starts_with($path, 'modules')) {
-
-                    if (in_array($path, $this->combinedFiles)) {
-                        info('Skipping '.$path);
-                        unset($this->combinedFiles[$path]);
-                        return;
-                    }    
-
-                    if ($type === Watch::EVENT_TYPE_FILE_CREATED || $type === Watch::EVENT_TYPE_FILE_UPDATED) {
-                        $this->handleModuleModified($path);
-                    }
+                    $this->handleModuleModified($path);
 
                     return;
                 }
@@ -74,16 +72,7 @@ class WatchCommand extends Command
                 ])) {
                     return;
                 }
-
-                if (in_array($path, $this->builtFiles)) {
-                    info('Skipping '.$path);
-                    unset($this->builtFiles[$path]);
-                    return;
-                }
-
-                if ($type === Watch::EVENT_TYPE_FILE_CREATED || $type === Watch::EVENT_TYPE_FILE_UPDATED) {
-                    $this->handleFileModified($path);
-                }
+                $this->handleFileModified($path);
             })
             ->start();
     }
