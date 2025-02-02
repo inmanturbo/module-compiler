@@ -40,18 +40,19 @@ class AppendCommand extends Command
                 '--module-path' => $this->option('module-path'),
             ]);
 
-            if($this->option('keep')) {
+            if ($this->option('keep')) {
                 return 0;
             }
 
-            foreach($matches[1] as $stub) {
+            foreach ($matches[1] as $stub) {
                 unlink($stub);
             }
 
             return 0;
         }
-        
+
         $this->error($output);
+
         return 1;
     }
 }

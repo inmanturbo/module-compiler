@@ -101,7 +101,7 @@ class CombineCommand extends Command
                 continue;
             }
 
-            $files = (new Finder)->in($fullPath)->name($this->option('name') ? $this->option('name'): '*.php')->files();
+            $files = (new Finder)->in($fullPath)->name($this->option('name') ? $this->option('name') : '*.php')->files();
 
             foreach ($files as $file) {
                 $filePath = str_replace($buildPath, '', $file->getPathname());
@@ -170,7 +170,7 @@ class CombineCommand extends Command
         $fullExtension = implode('.', array_slice(explode('.', basename($buildModule)), 1));
 
         $namespace = match ($fullExtension) {
-            'php' => 'namespace i'. str()->of(str()->ulid())->lower()->__toString().';',
+            'php' => 'namespace i'.str()->of(str()->ulid())->lower()->__toString().';',
             default => '',
         };
 
@@ -181,6 +181,8 @@ class CombineCommand extends Command
         }
 
         File::append($buildModule, $block);
+
+        event('combined.file', [$buildModule]);
 
         $this->info("Appended file: {$filePath} to module: {$buildModule}");
     }

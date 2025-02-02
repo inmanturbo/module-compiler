@@ -10,7 +10,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.9",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "spatie/file-system-watcher": "^1.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -65,14 +66,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": {
-        "mod": {
-            "type": "path",
-            "url": "../*",
-            "options": {
-                "symlink": false
-            }
-        }
-    }
+    "prefer-stable": true
 }

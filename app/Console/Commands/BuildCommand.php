@@ -102,6 +102,11 @@ class BuildCommand extends Command
                 try {
                     File::put($fullPath, $fileContent);
                     $this->info("Built file: {$relativePath}");
+                    event('built.file', [
+                        'relativePath' => $relativePath,
+                        'fullPath' => $fullPath,
+                        'fileContent' => $fileContent,
+                    ]);
                 } catch (\Exception $e) {
                     $this->error("Failed to write file: {$relativePath}. Error: {$e->getMessage()}");
                 }

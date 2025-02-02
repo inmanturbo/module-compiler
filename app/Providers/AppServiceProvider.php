@@ -7,6 +7,7 @@ use Inmanturbo\ModuleCompiler\Console\Commands\AddProvidersCommand;
 use Inmanturbo\ModuleCompiler\Console\Commands\AppendCommand;
 use Inmanturbo\ModuleCompiler\Console\Commands\BuildCommand;
 use Inmanturbo\ModuleCompiler\Console\Commands\CombineCommand;
+use Inmanturbo\ModuleCompiler\Console\Commands\WatchCommand;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
                 CombineCommand::class,
                 AppendCommand::class,
                 AddProvidersCommand::class,
+                WatchCommand::class,
             ]);
         }
     }

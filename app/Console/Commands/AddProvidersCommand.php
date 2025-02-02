@@ -29,19 +29,21 @@ class AddProvidersCommand extends Command
         $providersPath = app_path('Providers');
         $bootstrapProvidersFile = base_path('bootstrap/providers.php');
 
-        if (!File::exists($providersPath)) {
+        if (! File::exists($providersPath)) {
             $this->error("The Providers directory does not exist at {$providersPath}");
+
             return;
         }
 
-        if (!File::exists($bootstrapProvidersFile)) {
-            $this->error("The bootstrap/providers.php file does not exist.");
+        if (! File::exists($bootstrapProvidersFile)) {
+            $this->error('The bootstrap/providers.php file does not exist.');
+
             return;
         }
 
         $providers = collect(File::files($providersPath))
-            ->filter(fn($file) => $file->getExtension() === 'php')
-            ->map(fn($file) => 'App\\Providers\\' . $file->getFilenameWithoutExtension())
+            ->filter(fn ($file) => $file->getExtension() === 'php')
+            ->map(fn ($file) => 'App\\Providers\\'.$file->getFilenameWithoutExtension())
             ->values()
             ->toArray();
 
@@ -51,7 +53,7 @@ class AddProvidersCommand extends Command
         }
         $providersArrayContent .= "];\n";
 
-        File::put($bootstrapProvidersFile, "<?php\n\n" . $providersArrayContent);
+        File::put($bootstrapProvidersFile, "<?php\n\n".$providersArrayContent);
 
         $this->info("Providers have been successfully added to {$bootstrapProvidersFile}.");
     }
