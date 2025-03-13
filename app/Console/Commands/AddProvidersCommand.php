@@ -32,7 +32,7 @@ class AddProvidersCommand extends Command
         }
 
         if ($this->option('realpath')) {
-            foreach ($this->$this->option('paths') as $path) {
+            foreach ($this->option('paths') as $path) {
                 if (!$path = realpath($path)) {
                     continue;
                 }
@@ -42,7 +42,7 @@ class AddProvidersCommand extends Command
             return;
         }
        
-        foreach ($this->$this->option('paths') as $path) {
+        foreach ($this->option('paths') as $path) {
             $path = base_path($path);
             $this->writeProviders($path);
         }
