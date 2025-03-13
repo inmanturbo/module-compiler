@@ -26,12 +26,12 @@ class AddProvidersCommand extends Command
      */
     public function handle(): void
     {
-        if (!count($this->option('paths') {
+        if (!count($this->option('paths')) {
             $this->writeProviders();
             return;
         }
 
-        if ($this->option('realpath') {
+        if ($this->option('realpath')) {
             foreach ($this->$this->option('paths') as $path) {
                 if (!$path = realpath($path)) {
                     continue;
