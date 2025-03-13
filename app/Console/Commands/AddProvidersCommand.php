@@ -12,7 +12,7 @@ class AddProvidersCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'providers:add';
+    protected $signature = 'providers:add {--paths=* --realpath=false}';
 
     /**
      * The console command description.
@@ -26,8 +26,32 @@ class AddProvidersCommand extends Command
      */
     public function handle(): void
     {
-        $providersPath = app_path('Providers');
-        $bootstrapProvidersFile = base_path('bootstrap/providers.php');
+        if (!count($this->option('paths') {
+            $this->writeProviders();
+            return;
+        }
+
+        if ($this->option('realpath') {
+            foreach ($this->$this->option('paths') as $path) {
+                if (!$path = realpath($path)) {
+                    continue;
+                }
+                $this->writeProviders($path);
+            }
+
+            return;
+        }
+       
+        foreach ($this->$this->option('paths') as $path) {
+            $path = base_path($path);
+            $this->writeProviders($path);
+        }
+    }
+
+    protected function writeProviders($providersPath = null, $bootstrapProvidersFile = null)
+    {
+        $providersPath ??= app_path('Providers');
+        $bootstrapProvidersFile ??= base_path('bootstrap/providers.php');
 
         if (! File::exists($providersPath)) {
             $this->error("The Providers directory does not exist at {$providersPath}");
