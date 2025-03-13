@@ -65,11 +65,15 @@ class AddProvidersCommand extends Command
             return;
         }
 
+        $existingProviders = include($bootstrapProvidersFile);
+
         $providers = collect(File::files($providersPath))
             ->filter(fn ($file): bool => $file->getExtension() === 'php')
             ->map(fn ($file): string => 'App\\Providers\\'.$file->getFilenameWithoutExtension())
             ->values()
             ->toArray();
+
+        $providers = array_merge($existingProviders, $providers);
 
         $providersArrayContent = "return [\n";
         foreach ($providers as $provider) {
