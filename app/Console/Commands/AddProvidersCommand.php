@@ -73,7 +73,7 @@ class AddProvidersCommand extends Command
             ->values()
             ->toArray();
 
-        $providers = array_merge($existingProviders, $providers);
+        $providers = array_unique(array_merge($existingProviders, $providers));
 
         $providersArrayContent = "return [\n";
         foreach ($providers as $provider) {
