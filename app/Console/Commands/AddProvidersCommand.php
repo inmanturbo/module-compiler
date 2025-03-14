@@ -12,7 +12,7 @@ class AddProvidersCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'providers:add {--paths=*} {--realpath=false}';
+    protected $signature = 'providers:add {--paths=*} {--realpath}';
 
     /**
      * The console command description.
