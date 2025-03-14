@@ -24,14 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                BuildCommand::class,
-                CombineCommand::class,
-                AppendCommand::class,
-                AddProvidersCommand::class,
-                WatchCommand::class,
-            ]);
-        }
+        $this->commands([
+            BuildCommand::class,
+            CombineCommand::class,
+            AppendCommand::class,
+            AddProvidersCommand::class,
+            WatchCommand::class,
+        ]);
     }
 }
